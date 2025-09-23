@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/ai_lint"
+
+code, out = AiLint::CLI.run(ARGV)
+puts out if out && !out.empty?
+exit(code.to_i)
