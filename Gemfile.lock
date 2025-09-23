@@ -1,12 +1,13 @@
 PATH
   remote: .
   specs:
-    ai_lint (0.0.1)
+    ai_lint (0.0.2)
 
 GEM
   remote: https://rubygems.org/
   specs:
     diff-lcs (1.6.2)
+    rake (13.3.0)
     rspec (3.13.1)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
@@ -27,6 +28,7 @@ PLATFORMS
 
 DEPENDENCIES
   ai_lint!
+  rake (~> 13.0)
   rspec (~> 3.13)
 
 BUNDLED WITH

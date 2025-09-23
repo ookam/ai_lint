@@ -40,4 +40,22 @@ RSpec.describe AiLint::Runner do
     expect(res[:status]).to eq("ng")
     expect(res[:messages]).to eq(["m"])
   end
+
+  it "ignores example json then uses real json on next line" do
+    fake_engine = Class.new do
+      def initialize(rule:, engine:); end
+      def call(_)
+        <<~OUT
+          返すJSONの形式:
+          {"file":".all_lint.yml","status":"ok|ng","messages":["..."]}
+          実際の応答:
+          {"file":".all_lint.yml","status":"ok","messages":[]}
+        OUT
+      end
+    end
+    r = described_class.new(rule: rule, engine: engine, jobs: 1, engine_class: fake_engine)
+    res = r.run([".all_lint.yml"]).first
+    expect(res[:status]).to eq("ok")
+    expect(res[:messages]).to eq([])
+  end
 end
