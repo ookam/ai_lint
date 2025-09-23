@@ -13,6 +13,8 @@ Gem::Specification.new do |spec|
     Dir["lib/**/*", "README.md", "exe/*"]
   end
 
+  # Executables are located under exe/, not the default bin/
+  spec.bindir        = "exe"
   spec.executables   = ["ai_lint"]
   spec.require_paths = ["lib"]
 
