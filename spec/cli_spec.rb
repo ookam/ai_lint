@@ -191,4 +191,26 @@ RSpec.describe AiLint::CLI do
     expect(out).to include("認証エラー")
     expect(out).to include("/login")
   end
+
+  it "skips directories and processes only files" do
+    # テンポラリのディレクトリとファイルを作成
+    dir = File.join("spec", "fixtures", "some_dir")
+    FileUtils.mkdir_p(dir)
+    file = File.join(dir, "target.rb")
+    File.write(file, "puts :ok\n")
+
+    captured_files = nil
+    fake_runner = Class.new do
+      def initialize(rule:, engine:, jobs:); end
+      def run(files)
+        # 呼び出されたファイル一覧を検査用に返す
+        [{ file: files.first, status: "ok", messages: [] }]
+      end
+    end
+
+    code, out = AiLint::CLI.run(["-r", rule, "-a", engine, "-j", jobs, dir, file], runner_class: fake_runner)
+    expect(code).to eq(0)
+    expect(out).to include("SKIP (directory): #{dir}")
+    expect(out).to include(file)
+  end
 end
